@@ -34,6 +34,8 @@ namespace GitHubAPI.Models
         public string Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
+        [JsonProperty("language")]
+        public string Language { get; set; }
         [JsonProperty("owner")]
         public UserData Owner { get; set; }
         [JsonProperty("description")]

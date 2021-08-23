@@ -2,6 +2,18 @@
 @{
     ViewBag.Title = "Meus repositórios";
 }
+<script> 
+    function fireEvent(element, event) {
+        if (document.createEvent) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent(event, true, true); 
+            return element.dispatchEvent(evt);
+        } else {
+            var evt = document.createEventObject();
+            return element.fireEvent('on' + event, evt);
+        }
+    }
+</script>
 
 <div>
     @if (@ViewBag.repositories != null && @ViewBag.repositories.Length > 0)
@@ -9,33 +21,40 @@
         <div>
             @foreach (var repos in @ViewBag.repositories)
             {
+
                 <hr />
-                <table>
-                    <tbody>
-                        <tr>
-                            <td><p><strong>Nome do repositório:</strong> @repos.Name </p></td>
-                        </tr>
-                        <tr>
-                            <td><p><strong>Usuário do proprietário:</strong> @repos.Owner.Login</p></td>
-                        </tr>
-                        <tr>
-                            <td><p><strong>Descrição:</strong> @repos.Description </p></td>
-                        </tr>
-                        @using (Html.BeginForm("Favorites", "Home", FormMethod.Post))
-                        {
-                            if (HomeController.ExistsFavorite(repos.Url))
-                            {
-                                <p style="float: right;"><button name="removeFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Remover dos favoritos</button></p>
-                            }
-                            else
-                            {
-                                <p style="float: right;"><button name="addFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Adicionar aos favoritos</button></p>
-                            }
-                        }
+                 using (Html.BeginForm("Details", "Home", FormMethod.Post))
+                 {
+                        <table onclick="fireEvent(document.getElementById('detalhar'), 'click');" data-toggle="modal" data-target="#detalhar-repositorio" class="btn btn-md btn-success" width="1000" ><button id="detalhar" name="urlRepos" class="btn btn-md btn-success" value="@repos.Url">DETALHAR REPOSITÓRIO</button>
+                            
+                            <tbody>                           
+                                 <tr>
+                                     <td><p><strong>Nome do repositório:</strong> @repos.Name </p></td>
+                                 </tr>
+                                 <tr>
+                                     <td><p><strong>Usuário do proprietário:</strong> @repos.Owner.Login</p></td>
+                                 </tr>
+                                 <tr>
+                                     <td><p><strong>Descrição:</strong> @repos.Description </p></td>
+                                 </tr>                           
+
+                                
+                                @using (Html.BeginForm("Favorites", "Home", FormMethod.Post))
+                                {
+                                    if (HomeController.ExistsFavorite(repos.Url))
+                                    {
+                                        <p style="float: right;"><button name="removeFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Remover dos favoritos</button></p>
+                                    }
+                                    else
+                                    {
+                                        <p style="float: right;"><button name="addFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Adicionar aos favoritos</button></p>
+                                    }
+                                }
 
 
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                 }
                 <hr />
 
             }

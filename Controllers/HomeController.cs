@@ -110,6 +110,27 @@ namespace GitHubAPI.Controllers
             return View();
         }
 
+        public ActionResult Details(string urlRepos)
+        {
+            Thread.Sleep(200);
+
+            RepositoryData repository = RequestAPI<RepositoryData>(urlRepos, "", "GET");
+
+            Thread.Sleep(200);
+
+            UserData[] contributors = RequestAPI<UserData[]>(repository.Contributors_url, "", "GET");
+
+            ViewBag.urlRepos = urlRepos;
+            ViewBag.name = repository.Name;
+            ViewBag.description = repository.Description;
+            ViewBag.language = repository.Language;
+            ViewBag.updated_at = repository.Updated_At;
+            ViewBag.owner = repository.Owner;
+            ViewBag.contributors = contributors;
+
+            return View();
+        }
+
         public static T RequestAPI<T>(string url, string methodPath, string methodHTTP)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + methodPath);
@@ -121,14 +142,7 @@ namespace GitHubAPI.Controllers
             using (var streamReader = new StreamReader(response.GetResponseStream()))
             {
                 T result = JsonConvert.DeserializeObject<T>(streamReader.ReadToEnd());
-
-                if (result == null)
-                {
-                    throw new Exception("FALHA AO TENTAR ACESSAR: " + url + methodPath);
-                }
-
                 return result;
-
             }
         }
     

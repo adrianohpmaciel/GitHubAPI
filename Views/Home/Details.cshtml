@@ -1,0 +1,65 @@
+﻿@using GitHubAPI.Controllers;
+@using GitHubAPI.Models; 
+@{
+    ViewBag.Title = "Detalhes";
+}
+
+@if (ViewBag.name != null)
+{
+    <div>
+        
+         <hr />
+         <table>
+             <tbody>
+                 <tr>
+                     <td><p><strong>Nome do repositório:</strong> @ViewBag.name </p></td>
+                 </tr>
+                 <tr>
+                     <td><p><strong>Descrição:</strong> @ViewBag.description </p></td>
+                 </tr>
+                 <tr>
+                     <td><p><strong>Proprietário:</strong> @ViewBag.owner.Login</p></td>
+                 </tr>
+                 <tr>
+                     <td><p><strong>Última data de atualização:</strong> @ViewBag.updated_at </p></td>
+                 </tr>
+
+                 @using (Html.BeginForm("Favorites", "Home", FormMethod.Post))
+                 {
+                     if (HomeController.ExistsFavorite(ViewBag.urlRepos))
+                     {
+                         <p style="float: right;"><button name="removeFavUrl" class="btn btn-primary" value="@ViewBag.urlRepos" height="60" width="60" border="10">Remover dos favoritos</button></p>
+                     }
+                     else
+                     {
+                         <p style="float: right;"><button name="addFavUrl" class="btn btn-primary" value="@ViewBag.urlRepos" height="60" width="60" border="10">Adicionar aos favoritos</button></p>
+                     }
+                 }
+
+                 @if (ViewBag.contributors == null)
+                 {
+                     <tr>
+                         <td><p><strong>Não há contribuidores nesse repositório!</strong> </p></td>
+                     </tr>
+                 }
+                 else
+                 {
+                     <tr>
+                         <td><p><strong>Contribuidores: </strong> </p></td>
+                     </tr>
+                     foreach (UserData contribuitor in ViewBag.contributors)
+                     {
+                         <tr>
+                             <td><p><strong>@contribuitor.Login</strong> </p></td>
+                         </tr>
+                     }
+                 }
+
+             </tbody>
+         </table>
+         <hr />
+
+        
+    </div>
+
+}
