@@ -1,0 +1,44 @@
+﻿@using GitHubAPI.Controllers;
+@{
+    ViewBag.Title = "Meus repositórios";
+}
+
+<div>
+    @if (@ViewBag.repositories != null && @ViewBag.repositories.Length > 0)
+     {
+        <div>
+            @foreach (var repos in @ViewBag.repositories)
+            {
+                <hr />
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><p><strong>Nome do repositório:</strong> @repos.Name </p></td>
+                        </tr>
+                        <tr>
+                            <td><p><strong>Usuário do proprietário:</strong> @repos.Owner.Login</p></td>
+                        </tr>
+                        <tr>
+                            <td><p><strong>Descrição:</strong> @repos.Description </p></td>
+                        </tr>
+                        @using (Html.BeginForm("Favorites", "Home", FormMethod.Post))
+                        {
+                            if (HomeController.ExistsFavorite(repos.Url))
+                            {
+                                <p style="float: right;"><button name="removeFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Remover dos favoritos</button></p>
+                            }
+                            else
+                            {
+                                <p style="float: right;"><button name="addFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Adicionar aos favoritos</button></p>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+                <hr />
+
+            }
+        </div>
+     }
+</div>

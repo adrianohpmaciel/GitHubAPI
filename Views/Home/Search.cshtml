@@ -1,0 +1,56 @@
+﻿@using GitHubAPI.Controllers;
+@{
+    ViewBag.Title = "Procurar repositórios";
+}
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Post))
+{
+    <form>
+        <hr />
+        <input name="query" type="text" placeholder="Pesquisar..." value="" maxlength="240">
+
+        <input type="submit" name="search" value="Search" />
+        <hr />
+    </form>
+
+}
+
+@if (ViewBag.searchRepos != null)
+{
+    <div>
+        @foreach (var repos in @ViewBag.searchRepos)
+        {
+            <hr />
+            <table>
+                <tbody>
+                    <tr>
+                        <td><p><strong>Nome do repositório:</strong> @repos.Name </p></td>
+                    </tr>
+                    <tr>
+                        <td><p><strong>Usuário do proprietário:</strong> @repos.Owner.Login</p></td>
+                    </tr>
+                    <tr>
+                        <td><p><strong>Descrição:</strong> @repos.Description </p></td>
+                    </tr>
+
+                    @using (Html.BeginForm("Favorites", "Home", FormMethod.Post))
+                    {
+                        if (HomeController.ExistsFavorite(repos.Url))
+                        {
+                            <p style="float: right;"><button name="removeFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Remover dos favoritos</button></p>
+                        }
+                        else
+                        {
+                            <p style="float: right;"><button name="addFavUrl" class="btn btn-primary" value="@repos.Url" height="60" width="60" border="10">Adicionar aos favoritos</button></p>
+                        }
+                    }
+
+
+                </tbody>
+            </table>
+            <hr />
+
+        }
+    </div>
+
+}
