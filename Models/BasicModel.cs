@@ -26,6 +26,8 @@ namespace GitHubAPI.Models
         public DateTime Created_At { get; set; }
         [JsonProperty("updated_At")]
         public DateTime Updated_At { get; set; }
+        [JsonProperty("language")]
+        public Dictionary<string, int> Language { get; set; }
     }
 
     public class RepositoryData
